@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbg.datawork.mapper.TableCheckLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.entity.TableCheckLog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="table_check_id" column="table_check_id" jdbcType="BIGINT"/>
+            <result property="table_check_name" column="table_check_name" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="source_row" column="source_row" jdbcType="INTEGER"/>
+            <result property="target_row" column="target_row" jdbcType="INTEGER"/>
+            <result property="time_range" column="time_range" jdbcType="VARCHAR"/>
+            <result property="message" column="message" jdbcType="VARCHAR"/>
+            <result property="source_sql" column="source_sql" jdbcType="VARCHAR"/>
+            <result property="target_sql" column="target_sql" jdbcType="VARCHAR"/>
+            <result property="begin_time" column="begin_time" jdbcType="TIMESTAMP"/>
+            <result property="end_time" column="end_time" jdbcType="TIMESTAMP"/>
+            <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,table_check_id,table_check_name,
+        status,source_row,target_row,
+        time_range,message,source_sql,
+        target_sql,begin_time,end_time,
+        created_by,created_at,updated_by,
+        updated_at,deleted
+    </sql>
+</mapper>

@@ -9,6 +9,8 @@ import com.dbg.datawork.exception.BusinessException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -20,15 +22,19 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 权限校验 AOP
  *
- * @author <a href="https://github.com/lidbg">程序员鱼皮</a>
- * @from <a href="https://dbg.icu">编程导航知识星球</a>
  */
 @Aspect
 @Component
 public class AuthInterceptor {
 
-    @Resource
-    private UserService userService;
+    private final UserService userService;
+
+    @Autowired
+    public AuthInterceptor(@Lazy UserService userService) {
+        this.userService = userService;
+    }
+
+
 
     /**
      * 执行拦截

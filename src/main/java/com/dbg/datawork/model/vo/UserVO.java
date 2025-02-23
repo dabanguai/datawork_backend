@@ -1,14 +1,12 @@
 package com.dbg.datawork.model.vo;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;;
 import lombok.Data;
 
 /**
  * 用户视图（脱敏）
  *
- * @author <a href="https://github.com/lidbg">程序员鱼皮</a>
- * @from <a href="https://dbg.icu">编程导航知识星球</a>
  */
 @Data
 public class UserVO implements Serializable {
@@ -41,7 +39,7 @@ public class UserVO implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     private static final long serialVersionUID = 1L;
 }

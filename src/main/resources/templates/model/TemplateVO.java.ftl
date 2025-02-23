@@ -6,7 +6,7 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;;
 import java.util.List;
 
 /**
@@ -41,12 +41,12 @@ public class ${upperDataKey}VO implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 标签列表

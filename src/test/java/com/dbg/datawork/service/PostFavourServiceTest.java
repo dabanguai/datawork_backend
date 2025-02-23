@@ -2,7 +2,6 @@ package com.dbg.datawork.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.dbg.datawork.model.entity.Post;
 import com.dbg.datawork.model.entity.User;
 
 import javax.annotation.Resource;
@@ -14,8 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 /**
  * 帖子收藏服务测试
  *
- * @author <a href="https://github.com/lidbg">程序员鱼皮</a>
- * @from <a href="https://dbg.icu">编程导航知识星球</a>
  */
 @SpringBootTest
 class PostFavourServiceTest {

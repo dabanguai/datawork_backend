@@ -3,7 +3,6 @@ package com.dbg.datawork.mapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.dbg.datawork.model.entity.Post;
 
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
@@ -13,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 /**
  * 帖子收藏数据库操作测试
  *
- * @author <a href="https://github.com/lidbg">程序员鱼皮</a>
- * @from <a href="https://dbg.icu">编程导航知识星球</a>
  */
 @SpringBootTest
 class PostFavourMapperTest {

@@ -1,15 +1,5 @@
-# 数据库初始化
-# @author <a href="https://github.com/lidbg">程序员鱼皮</a>
-# @from <a href="https://dbg.icu">编程导航知识星球</a>
-
--- 创建库
-create database if not exists my_db;
-
--- 切换库
-use my_db;
-
 -- 用户表
-create table if not exists user
+CREATE TABLE IF NOT EXISTS "user"
 (
     id           bigint auto_increment comment 'id' primary key,
     userAccount  varchar(256)                           not null comment '账号',

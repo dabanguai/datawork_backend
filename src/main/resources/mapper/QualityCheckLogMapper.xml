@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbg.datawork.mapper.QualityCheckLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.entity.QualityCheckLog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="quality_check_id" column="quality_check_id" jdbcType="BIGINT"/>
+            <result property="quality_check_name" column="quality_check_name" jdbcType="VARCHAR"/>
+            <result property="key" column="key" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="message" column="message" jdbcType="VARCHAR"/>
+            <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+            <result property="quality_check_type" column="quality_check_type" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,quality_check_id,quality_check_name,
+        key,status,content,
+        message,created_by,created_at,
+        updated_by,updated_at,deleted,
+        quality_check_type
+    </sql>
+</mapper>

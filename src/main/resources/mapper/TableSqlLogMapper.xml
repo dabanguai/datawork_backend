@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbg.datawork.mapper.TableSqlLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.entity.TableSqlLog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="tableId" column="table_id" jdbcType="BIGINT"/>
+            <result property="action" column="action" jdbcType="VARCHAR"/>
+            <result property="before" column="before" jdbcType="VARCHAR"/>
+            <result property="after" column="after" jdbcType="VARCHAR"/>
+            <result property="createdBy" column="created_by" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="created_at" jdbcType="TIMESTAMP"/>
+            <result property="updatedBy" column="updated_by" jdbcType="VARCHAR"/>
+            <result property="updatedAt" column="updated_at" jdbcType="TIMESTAMP"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,table_id,action,
+        before,after,created_by,
+        created_at,updated_by,updated_at,
+        deleted
+    </sql>
+</mapper>

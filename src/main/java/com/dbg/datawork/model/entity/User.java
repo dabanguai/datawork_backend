@@ -6,18 +6,17 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
-import java.util.Date;
+
+import com.dbg.datawork.common.BaseEntity;
 import lombok.Data;
 
 /**
  * 用户
  *
- * @author <a href="https://github.com/lidbg">程序员鱼皮</a>
- * @from <a href="https://dbg.icu">编程导航知识星球</a>
  */
 @TableName(value = "user")
 @Data
-public class User implements Serializable {
+public class User extends BaseEntity implements Serializable {
 
     /**
      * id
@@ -66,20 +65,10 @@ public class User implements Serializable {
     private String userRole;
 
     /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
      * 是否删除
      */
-    @TableLogic
-    private Integer isDelete;
+    @TableLogic(value = "0", delval = "1")
+    private Integer deleted;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

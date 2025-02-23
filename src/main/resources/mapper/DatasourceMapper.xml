@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dbg.datawork.mapper.DatasourceMapper">
+    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.entity.Datasource">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="name" column="name" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="configuration" column="configuration" jdbcType="VARCHAR"/>
+            <result property="createdBy" column="createdBy" jdbcType="VARCHAR"/>
+            <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+            <result property="updatedBy" column="updatedBy" jdbcType="VARCHAR"/>
+            <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+            <result property="deleted" column="deleted" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,type,name,
+        status,remark,configuration,
+        createdBy,createdAt,updatedBy,
+        updatedAt,deleted
+    </sql>
+</mapper>
