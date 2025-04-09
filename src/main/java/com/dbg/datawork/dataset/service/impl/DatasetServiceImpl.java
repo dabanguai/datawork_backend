@@ -1,5 +1,7 @@
 package com.dbg.datawork.dataset.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.dbg.datawork.dataset.service.DatasetService;
 import com.dbg.datawork.infra.database.DDLDefinitions;
 import com.dbg.datawork.infra.database.DynamicDataSourceRegisterHelper;
@@ -8,15 +10,20 @@ import com.dbg.datawork.model.dto.datasource.DatasourceRequest;
 import com.dbg.datawork.model.enums.ExecuteStatusEnum;
 import com.dbg.datawork.model.enums.ScheduleType;
 import com.dbg.datawork.model.pojo.DataMigrationTask;
+import com.dbg.datawork.model.pojo.DataMigrationTaskLog;
 import com.dbg.datawork.model.pojo.Datasource;
+import com.dbg.datawork.service.DataMigrationTaskLogService;
 import com.dbg.datawork.service.DataMigrationTaskService;
 import com.dbg.datawork.service.impl.DatasourceServiceImpl;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.*;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,10 +45,18 @@ public class DatasetServiceImpl implements DatasetService {
     private DataMigrationTaskService dataMigrationTaskService;
 
     @Resource
+    private DataMigrationTaskLogService dataMigrationTaskLogService;
+
+    @Resource
     private DynamicDataSourceRegisterHelper dynamicHelper;
 
     @Override
-    public void transformData(DatasetRequest.TransformDataRequest transformDataRequest) throws SQLException {
+    public void transformData(Long taskId) throws SQLException {
+
+        DataMigrationTask migrationTaskServiceById = dataMigrationTaskService.getById(taskId);
+        DatasetRequest.AddDataMigrationTaskRequest addDataMigrationTaskRequest = new DatasetRequest.AddDataMigrationTaskRequest();
+        BeanUtil.copyProperties(migrationTaskServiceById, addDataMigrationTaskRequest);
+        DatasetRequest.TransformDataRequest transformDataRequest = new DatasetRequest.TransformDataRequest(addDataMigrationTaskRequest);
         // 1. 获取原表数据
         // 1.1 数据源连接
         ResultSet resultSet = null;
@@ -86,17 +101,111 @@ public class DatasetServiceImpl implements DatasetService {
 
             // 4. 批量插入数据
             int batchSize = 1000, count = 0;
-            while (resultSet.next()) {
-                for (int i = 1; i <= columnCount; i++) {
-                    insertStmt.setObject(i, resultSet.getObject(i));
-                }
-                insertStmt.addBatch();
+            int dataAmount = resultSet.getRow();
 
-                if (++count % batchSize == 0) {
+            DataMigrationTaskLog dataMigrationTaskLog = new DataMigrationTaskLog();
+            // 若 数据量小于1000 直接记录
+
+            LocalDateTime startTime = LocalDateTime.now();
+            if (dataAmount != 0 && dataAmount < 1000) {
+
+                dataMigrationTaskLog.setBatchCount(dataAmount);
+                dataMigrationTaskLog.setStatus(ExecuteStatusEnum.RUNNING.name());
+                dataMigrationTaskLog.setStartTime(startTime);
+                dataMigrationTaskLog.setTaskId(taskId);
+                dataMigrationTaskLogService.save(dataMigrationTaskLog);
+
+                try {
                     insertStmt.executeBatch();
+                    LocalDateTime endTime = LocalDateTime.now();
+                    dataMigrationTaskLog.setRecordsProcessed(100L);
+                    dataMigrationTaskLog.setEndTime(LocalDateTime.now());
+                    dataMigrationTaskLog.setDuration(Duration.ofSeconds(endTime.toEpochSecond(ZoneOffset.UTC), startTime.toEpochSecond(ZoneOffset.UTC)).getSeconds());
+                    dataMigrationTaskLog.setStatus(ExecuteStatusEnum.SUCCESS.name());
+                    dataMigrationTaskLogService.updateById(dataMigrationTaskLog);
+
+                } catch (Exception e) {
+                    LocalDateTime failTime = LocalDateTime.now();
+                    dataMigrationTaskLog.setStatus(ExecuteStatusEnum.FAILED.name());
+                    dataMigrationTaskLog.setEndTime(failTime);
+                    dataMigrationTaskLog.setDuration(Duration.ofSeconds(failTime.toEpochSecond(ZoneOffset.UTC), startTime.toEpochSecond(ZoneOffset.UTC)).getSeconds());
+                    dataMigrationTaskLog.setErrorMessage(e.getMessage());
+                    dataMigrationTaskLogService.updateById(dataMigrationTaskLog);
+                    throw new RuntimeException(e);
                 }
             }
-            insertStmt.executeBatch();
+
+            if (dataAmount >= 1000) {
+                while (resultSet.next()) {
+
+                    for (int i = 1; i <= columnCount; i++) {
+                        insertStmt.setObject(i, resultSet.getObject(i));
+                    }
+                    insertStmt.addBatch();
+
+                    // 执行详情记录
+                    if (++count % batchSize == 0) {
+                        DataMigrationTaskLog batchDataMigrationTaskLog = new DataMigrationTaskLog();
+                        // 若 数据量小于1000 直接记录
+                        LocalDateTime batchStartTime = LocalDateTime.now();
+
+                        batchDataMigrationTaskLog.setBatchCount(dataAmount);
+                        batchDataMigrationTaskLog.setStatus(ExecuteStatusEnum.RUNNING.name());
+                        batchDataMigrationTaskLog.setStartTime(batchStartTime);
+                        batchDataMigrationTaskLog.setTaskId(taskId);
+                        dataMigrationTaskLogService.save(batchDataMigrationTaskLog);
+
+                        try {
+
+                            insertStmt.executeBatch();
+                            LocalDateTime batchEndTime = LocalDateTime.now();
+                            batchDataMigrationTaskLog.setRecordsProcessed(100L);
+                            batchDataMigrationTaskLog.setEndTime(batchEndTime);
+                            batchDataMigrationTaskLog.setDuration(Duration.ofSeconds(batchEndTime.toEpochSecond(ZoneOffset.UTC), batchStartTime.toEpochSecond(ZoneOffset.UTC)).getSeconds());
+                            batchDataMigrationTaskLog.setStatus(ExecuteStatusEnum.SUCCESS.name());
+                            dataMigrationTaskLogService.updateById(batchDataMigrationTaskLog);
+                        } catch (Exception e) {
+                            LocalDateTime failTime = LocalDateTime.now();
+                            dataMigrationTaskLog.setStatus(ExecuteStatusEnum.FAILED.name());
+                            dataMigrationTaskLog.setEndTime(failTime);
+                            dataMigrationTaskLog.setDuration(Duration.ofSeconds(failTime.toEpochSecond(ZoneOffset.UTC), startTime.toEpochSecond(ZoneOffset.UTC)).getSeconds());
+                            dataMigrationTaskLog.setErrorMessage(e.getMessage());
+                            dataMigrationTaskLogService.updateById(dataMigrationTaskLog);
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+
+                DataMigrationTaskLog lastBatchDataMigrationTaskLog = new DataMigrationTaskLog();
+                // 若 数据量小于1000 直接记录
+                LocalDateTime batchStartTime = LocalDateTime.now();
+
+                lastBatchDataMigrationTaskLog.setBatchCount(dataAmount);
+                lastBatchDataMigrationTaskLog.setStatus(ExecuteStatusEnum.RUNNING.name());
+                lastBatchDataMigrationTaskLog.setStartTime(batchStartTime);
+                lastBatchDataMigrationTaskLog.setTaskId(taskId);
+                dataMigrationTaskLogService.save(lastBatchDataMigrationTaskLog);
+                try {
+                    insertStmt.executeBatch();
+                    insertStmt.executeBatch();
+                    LocalDateTime batchEndTime = LocalDateTime.now();
+                    lastBatchDataMigrationTaskLog.setRecordsProcessed(100L);
+                    lastBatchDataMigrationTaskLog.setEndTime(batchEndTime);
+                    lastBatchDataMigrationTaskLog.setDuration(Duration.ofSeconds(batchEndTime.toEpochSecond(ZoneOffset.UTC), batchStartTime.toEpochSecond(ZoneOffset.UTC)).getSeconds());
+                    lastBatchDataMigrationTaskLog.setStatus(ExecuteStatusEnum.SUCCESS.name());
+                    dataMigrationTaskLogService.updateById(lastBatchDataMigrationTaskLog);
+                } catch (Exception e) {
+                    LocalDateTime failTime = LocalDateTime.now();
+                    lastBatchDataMigrationTaskLog.setStatus(ExecuteStatusEnum.FAILED.name());
+                    lastBatchDataMigrationTaskLog.setEndTime(failTime);
+                    lastBatchDataMigrationTaskLog.setDuration(Duration.ofSeconds(failTime.toEpochSecond(ZoneOffset.UTC), startTime.toEpochSecond(ZoneOffset.UTC)).getSeconds());
+                    lastBatchDataMigrationTaskLog.setErrorMessage(e.getMessage());
+                    dataMigrationTaskLogService.updateById(lastBatchDataMigrationTaskLog);
+                    throw new RuntimeException(e);
+                }
+            }
+
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
@@ -112,6 +221,7 @@ public class DatasetServiceImpl implements DatasetService {
 
 
     @Override
+    @DS("mysql")
     public DataMigrationTask addDataMigrationTask(DatasetRequest.AddDataMigrationTaskRequest addDataMigrationTaskRequest) {
         DataMigrationTask dataMigrationTask = null;
         try {
@@ -119,7 +229,7 @@ public class DatasetServiceImpl implements DatasetService {
 
             DatasetRequest.TransformDataRequest transformDataRequest = new DatasetRequest.TransformDataRequest(addDataMigrationTaskRequest);
             if (ScheduleType.NOW.equals(addDataMigrationTaskRequest.getScheduleType())) {
-                transformData(transformDataRequest);
+                transformData(dataMigrationTask.getId());
             }
             return dataMigrationTask;
         } catch (Exception e) {
@@ -141,7 +251,7 @@ public class DatasetServiceImpl implements DatasetService {
         final String condition = buildTimeCondition(startTime, endTime);
 
         if (request.getEndTime() == null && request.getStartTime() == null) {
-            return DDLDefinitions.SELECT_DATA_LIMIT_1.replace("{source_table}", sourceTable);
+            return String.format(DDLDefinitions.SELECT_DATA_LIMIT_1, targetTable);
         }
 
         // 使用预编译占位符替换
@@ -150,8 +260,8 @@ public class DatasetServiceImpl implements DatasetService {
     }
 
     /**
-    * 构建时间条件表达式
-    */
+     * 构建时间条件表达式
+     */
     private String buildTimeCondition(LocalDateTime start, LocalDateTime end) {
         if (start != null && end != null) {
             return String.format("created_at BETWEEN '%s' AND '%s'",

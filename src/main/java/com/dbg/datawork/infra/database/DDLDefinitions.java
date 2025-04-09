@@ -9,15 +9,15 @@ package com.dbg.datawork.infra.database;
 public class DDLDefinitions {
 
     public static final String SELECT_DATA_LIMIT_1 = """
-            SELECT * FROM {source_table} LIMIT 1;
+            SELECT * FROM %s LIMIT 1;
             """;
 
     public static final String SELECT_DATA_FULL = """
-            SELECT * FROM {source_table} LIMIT 1;
+            SELECT * FROM %s LIMIT 1;
             """;
 
     public static final String SELECT_DATA_CONDITION = """
-            SELECT * FROM {source_table} WHERE {condition}
+            SELECT * FROM %s WHERE %s
             """;
 
     public static final String INSERT_DATA_CONDITION = """

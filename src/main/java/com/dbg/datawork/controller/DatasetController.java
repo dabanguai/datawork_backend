@@ -91,10 +91,11 @@ public class DatasetController {
 
     // todo 优化数据迁移 使用 ETL工具（Spring Batch） /  Debezium + Kafka
     @PostMapping("/data/transform")
-    public BaseResponse<Boolean> transform(@RequestBody DatasetRequest.TransformDataRequest transformDataRequest) {
+    public BaseResponse<Boolean> transform(@RequestBody Long taskId) {
+
 
         try {
-            datasetService.transformData(transformDataRequest);
+            datasetService.transformData(taskId);
             return ResultUtils.success(true);
         } catch (SQLException e) {
             return ResultUtils.error(ErrorCode.DATASET_INSERT_ERROR, e.getMessage());

@@ -21,7 +21,7 @@ public interface DatasetService {
      * @author 15968
      * @date: 2025/3/17 19:00
      */ 
-    void transformData(DatasetRequest.TransformDataRequest transformDataRequest) throws SQLException;
+    void transformData(Long taskId) throws SQLException;
 
     DataMigrationTask addDataMigrationTask(DatasetRequest.AddDataMigrationTaskRequest addDataMigrationTaskRequest);
 }
