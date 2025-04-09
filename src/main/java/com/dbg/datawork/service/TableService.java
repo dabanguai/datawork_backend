@@ -1,7 +1,11 @@
 package com.dbg.datawork.service;
 
-import com.dbg.datawork.model.entity.Table;
+import com.dbg.datawork.model.dto.datasource.TableRequest;
+import com.dbg.datawork.model.pojo.Table;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.dbg.datawork.model.vo.DatasourceTableCountVo;
+
+import java.util.List;
 
 /**
 * @author 15968
@@ -10,4 +14,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface TableService extends IService<Table> {
 
+    Table addTable(TableRequest.TableRequestDto tableRequestDto);
+
+    List<DatasourceTableCountVo> countTablesByDatasourceId(Long datasourceId);
+
+    List<Table> getTablesByDatasourceId(Long datasourceId);
+
+    Long countTables();
 }

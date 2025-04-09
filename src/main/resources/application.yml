@@ -19,11 +19,33 @@ spring:
     timeout: 2592000
   # 数据库配置
   # todo 需替换配置
+
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/datawork
-    username: root
-    password: 20021111
+    #多数据源配置
+    dynamic:
+      #设置默认的数据源
+      primary: master #设置默认的数据源或者数据源组,默认值即为master
+      datasource:
+        # 数据库1
+        mysql:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/datawork?useUnicode=true&characterEncoding=utf-8&useSSL=false
+          username: root
+          password: 20021111
+        # 数据库2
+        postgresql:
+          driver-class-name: org.postgresql.Driver
+          url: jdbc:postgresql://localhost:5432/datawork?useUnicode=true&characterEncoding=utf-8
+          username: postgres
+          password: 20021111
+      hikari: # 统一设置连接池参数（适用于所有数据源）
+        pool-name: MyPool
+        maximum-pool-size: 10
+        minimum-idle: 2
+        idle-timeout: 60000
+        max-lifetime: 1800000
+        connection-timeout: 30000
+
   # Redis 配置
   # todo 需替换配置，然后取消注释
   #  redis:

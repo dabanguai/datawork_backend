@@ -1,6 +1,6 @@
 package com.dbg.datawork.service;
 
-import com.dbg.datawork.model.entity.QualityCheckLog;
+import com.dbg.datawork.model.pojo.QualityCheckLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

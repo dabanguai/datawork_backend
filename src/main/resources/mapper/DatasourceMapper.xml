@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dbg.datawork.mapper.DatasourceMapper">
-    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.entity.Datasource">
+    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.pojo.Datasource">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="type" column="type" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>

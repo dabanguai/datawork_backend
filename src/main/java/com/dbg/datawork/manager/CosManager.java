@@ -3,7 +3,7 @@ package com.dbg.datawork.manager;
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
-import com.dbg.datawork.config.CosClientConfig;
+import com.dbg.datawork.infra.config.CosClientConfig;
 import java.io.File;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Component;

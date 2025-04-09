@@ -1,7 +1,7 @@
 package com.dbg.datawork.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dbg.datawork.model.entity.Task;
+import com.dbg.datawork.model.pojo.Task;
 import com.dbg.datawork.service.TaskService;
 import com.dbg.datawork.mapper.TaskMapper;
 import org.springframework.stereotype.Service;

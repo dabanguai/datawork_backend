@@ -3,7 +3,7 @@ package com.dbg.datawork.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dbg.datawork.model.dto.datasource.DatasourceRequest;
-import com.dbg.datawork.model.entity.Datasource;
+import com.dbg.datawork.model.pojo.Datasource;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -17,5 +17,10 @@ public interface DatasourceService extends IService<Datasource> {
 
     QueryWrapper<Datasource> getQueryWrapper(DatasourceRequest datasourceRequest);
 
-    Long addDatasource(DatasourceRequest dasourceRequest);
+    Datasource addDatasource(DatasourceRequest.AddDatasourceDto dasourceRequest);
+
+    Datasource getByInfo(String type, String tableName);
+
+    Datasource updateDatasource(DatasourceRequest.UpdateDatasourceDto datasourceRequest);
+
 }

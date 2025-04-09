@@ -1,21 +1,25 @@
 package com.dbg.datawork.service.impl;
 
-import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dbg.datawork.common.ErrorCode;
-import com.dbg.datawork.constant.CommonConstant;
+
+import com.dbg.datawork.infra.common.ErrorCode;
+import com.dbg.datawork.infra.constant.CommonConstant;
+import com.dbg.datawork.exception.BusinessException;
 import com.dbg.datawork.exception.ThrowUtils;
-import com.dbg.datawork.model.dto.datasource.DatasourceRequest;
-import com.dbg.datawork.model.entity.Datasource;
-import com.dbg.datawork.service.DatasourceService;
 import com.dbg.datawork.mapper.DatasourceMapper;
+import com.dbg.datawork.model.dto.datasource.DatasourceRequest;
+import com.dbg.datawork.model.pojo.Datasource;
+import com.dbg.datawork.service.DatasourceService;
 import com.dbg.datawork.service.UserService;
-import com.dbg.datawork.utils.SqlUtils;
+import com.dbg.datawork.infra.utils.SqlUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,11 +30,14 @@ import javax.annotation.Resource;
  * @createDate 2025-02-22 22:32:57
  */
 @Service
+@DS("mysql")
 public class DatasourceServiceImpl extends ServiceImpl<DatasourceMapper, Datasource>
         implements DatasourceService {
 
     @Resource
     private UserService userService;
+
+    // todo 划分 查询和业务逻辑
     @Override
     public Page<Datasource> getDatasourcePage(DatasourceRequest datasourceRequest) {
         Page<Datasource> datasourcePage = new Page<>(datasourceRequest.getCurrent(), datasourceRequest.getPageSize());
@@ -39,25 +46,28 @@ public class DatasourceServiceImpl extends ServiceImpl<DatasourceMapper, Datasou
     }
 
     @Override
-    public Long addDatasource(DatasourceRequest datasourceRequest) {
+    public Datasource addDatasource(DatasourceRequest.AddDatasourceDto datasourceRequest) {
         Datasource datasource = new Datasource();
-        BeanUtils.copyProperties(datasourceRequest, datasource);
+        BeanUtil.copyProperties(datasourceRequest, datasource, CopyOptions.create().setIgnoreNullValue(true));
 
-        if (StringUtils.isNotEmpty(datasourceRequest.getConfiguration())) {
-            datasource.setConfiguration(datasourceRequest.getConfiguration());
+        if (StringUtils.isEmpty(datasourceRequest.getConfiguration())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "配置信息不能为空");
+            // datasource.setConfiguration(datasourceRequest.getConfiguration());
         }
-        if (StringUtils.isNotEmpty(datasourceRequest.getType())) {
-            datasource.setType(datasourceRequest.getType());
+        if (StringUtils.isEmpty(datasourceRequest.getType())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "数据源类型不能为空");
         }
-        if (StringUtils.isNotEmpty(datasourceRequest.getName())) {
-            datasource.setName(datasourceRequest.getName());
+        if (StringUtils.isEmpty(datasourceRequest.getName())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "数据源名称不能为空");
         }
         // todo 增加数据源校验及身份校验
         boolean isAdd = save(datasource);
         ThrowUtils.throwIf(!isAdd, ErrorCode.OPERATION_ERROR);
-        return datasource.getId();
+        return datasource;
     }
 
+
+    // todo 使用生成查询
     public QueryWrapper<Datasource> getQueryWrapper(DatasourceRequest datasourceRequest) {
 
         QueryWrapper<Datasource> queryWrapper = new QueryWrapper<>();
@@ -76,6 +86,31 @@ public class DatasourceServiceImpl extends ServiceImpl<DatasourceMapper, Datasou
                 sortField);
         return queryWrapper;
     }
+
+    public Datasource getByInfo(String type, String databaseName) {
+        LambdaQueryWrapper<Datasource> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Datasource::getType, type);
+        queryWrapper.eq(Datasource::getName, databaseName);
+        Datasource datasource = getOne(queryWrapper);
+        return datasource;
+    }
+
+    @Override
+    public Datasource updateDatasource(DatasourceRequest.UpdateDatasourceDto datasourceRequest) {
+        String id = datasourceRequest.getId();
+        if (StrUtil.isEmpty(id)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "未传入数据源");
+        }
+
+        Datasource datasource = getById(id);
+        datasource.setType(datasourceRequest.getType());
+        datasource.setName(datasourceRequest.getName());
+        datasource.setConfiguration(datasourceRequest.getConfiguration());
+
+        updateById(datasource);
+        return datasource;
+    }
+
 }
 
 

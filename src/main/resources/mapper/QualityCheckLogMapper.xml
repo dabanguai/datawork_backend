@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dbg.datawork.mapper.QualityCheckLogMapper">
 
-    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.entity.QualityCheckLog">
+    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.pojo.QualityCheckLog">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="quality_check_id" column="quality_check_id" jdbcType="BIGINT"/>
             <result property="quality_check_name" column="quality_check_name" jdbcType="VARCHAR"/>

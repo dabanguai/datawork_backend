@@ -1,6 +1,6 @@
 package com.dbg.datawork.service;
 
-import com.dbg.datawork.model.entity.User;
+import com.dbg.datawork.model.pojo.User;
 
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;

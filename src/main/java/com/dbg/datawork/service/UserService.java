@@ -3,7 +3,7 @@ package com.dbg.datawork.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.dbg.datawork.model.dto.user.UserQueryRequest;
-import com.dbg.datawork.model.entity.User;
+import com.dbg.datawork.model.pojo.User;
 import com.dbg.datawork.model.vo.LoginUserVO;
 import com.dbg.datawork.model.vo.UserVO;
 import java.util.List;

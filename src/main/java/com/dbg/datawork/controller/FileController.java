@@ -1,14 +1,14 @@
 package com.dbg.datawork.controller;
 
 import cn.hutool.core.io.FileUtil;
-import com.dbg.datawork.common.BaseResponse;
-import com.dbg.datawork.common.ErrorCode;
-import com.dbg.datawork.common.ResultUtils;
-import com.dbg.datawork.constant.FileConstant;
+import com.dbg.datawork.infra.common.BaseResponse;
+import com.dbg.datawork.infra.common.ErrorCode;
+import com.dbg.datawork.infra.common.ResultUtils;
+import com.dbg.datawork.infra.constant.FileConstant;
 import com.dbg.datawork.exception.BusinessException;
 import com.dbg.datawork.manager.CosManager;
 import com.dbg.datawork.model.dto.file.UploadFileRequest;
-import com.dbg.datawork.model.entity.User;
+import com.dbg.datawork.model.pojo.User;
 import com.dbg.datawork.model.enums.FileUploadBizEnum;
 import com.dbg.datawork.service.UserService;
 

@@ -1,6 +1,6 @@
 package com.dbg.datawork.exception;
 
-import com.dbg.datawork.common.ErrorCode;
+import com.dbg.datawork.infra.common.ErrorCode;
 
 /**
  * 抛异常工具类

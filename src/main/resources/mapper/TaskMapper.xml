@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dbg.datawork.mapper.TaskMapper">
 
-    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.entity.Task">
+    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.pojo.Task">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="tableId" column="table_id" jdbcType="BIGINT"/>
             <result property="layer" column="layer" jdbcType="VARCHAR"/>

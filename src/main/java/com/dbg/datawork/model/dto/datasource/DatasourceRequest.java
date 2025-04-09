@@ -1,13 +1,14 @@
 package com.dbg.datawork.model.dto.datasource;
 
-import com.dbg.datawork.common.PageRequest;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.dbg.datawork.infra.common.PageRequest;
+import com.dbg.datawork.datasource.DatasourceConfig;
+import com.dbg.datawork.model.enums.ScheduleType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author 15968
@@ -15,64 +16,85 @@ import java.io.IOException;
  * @description: TODO
  * @date 2025/2/23 17:18
  */
+@Data
 public class DatasourceRequest extends PageRequest {
 
     private String id;
     private String type;
-
     private String name;
-
     private String configuration;
 
-    public String getId() {
-        return id;
+
+    @JsonIgnore
+    public DatasourceConfig getConfig() throws JsonProcessingException {
+        if (this.configuration == null) return null;
+        return new ObjectMapper().readValue(this.configuration, DatasourceConfig.class);
     }
 
-    public void setId(String id) {
-        this.id = id;
+
+    @Data
+    public static class AddDatasourceDto {
+        private String type;
+        private String name;
+        private String configuration;
     }
 
-    public String getType() {
-        return type;
+    @Data
+    public static class UpdateDatasourceDto {
+        private String id;
+        private String type;
+        private String name;
+        private String configuration;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    @Data
+    @AllArgsConstructor
+    public static class GetConnection {
+        private String type;
+        private String name;
+        private String configuration;
+    }
+    @Data
+    @AllArgsConstructor
+    public static class GetSourceDDL {
+        private String databaseType;
+        private String databaseName;
+        private String tableName;
     }
 
-    public String getName() {
-        return name;
+
+    @Data
+    public static class GetTransferDDL {
+
+        // 数据源
+        private String originalDDL;
+        private String originalType;
+        private String targetType;
+        private String targetDatasource;
+
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UseDDL {
+        // 数据源
+        private String targetType;
+        private String targetDatasource;
+        private String ddl;
     }
 
-    public String getConfiguration() {
-        return configuration;
-    }
+    @Data
+    public static class AddTaskRequest {
+        private String originalDatabaseType;
+        private String targetDatabaseType;
+        private String originalDatabaseName;
+        private String originalTableName;
+        private String targetDatabaseName;
+        private String targetTableName;
+        private String targetDDL;
+        private String schema;
+        private ScheduleType scheduleType;
 
-    public void setConfiguration(String configuration) {
-        this.configuration = configuration;
-    }
-
-    // 自定义 setter 方法：将 JSON 对象转换为字符串
-    @JsonSetter("configuration")
-    public void setConfiguration(Object config) {
-        try {
-            this.configuration = new ObjectMapper().writeValueAsString(config);
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to serialize configuration", e);
-        }
-    }
-
-    // 自定义 getter 方法：将字符串转换为 JSON 对象
-    @JsonGetter("configuration")
-    public Object getConfigurationObject() {
-        try {
-            return new ObjectMapper().readValue(configuration, Object.class);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to deserialize configuration", e);
-        }
     }
 }

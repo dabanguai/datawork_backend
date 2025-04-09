@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dbg.datawork.mapper.TableCheckMapper">
 
-    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.entity.TableCheck">
+    <resultMap id="BaseResultMap" type="com.dbg.datawork.model.pojo.TableCheck">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="source_datasource_id" column="source_datasource_id" jdbcType="BIGINT"/>
             <result property="target_datasource_id" column="target_datasource_id" jdbcType="BIGINT"/>

@@ -1,7 +1,7 @@
 package com.dbg.datawork.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dbg.datawork.model.entity.QualityCheckLog;
+import com.dbg.datawork.model.pojo.QualityCheckLog;
 import com.dbg.datawork.service.QualityCheckLogService;
 import com.dbg.datawork.mapper.QualityCheckLogMapper;
 import org.springframework.stereotype.Service;

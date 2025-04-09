@@ -1,7 +1,7 @@
 package com.dbg.datawork.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dbg.datawork.model.entity.TableSqlLog;
+import com.dbg.datawork.model.pojo.TableSqlLog;
 import com.dbg.datawork.service.TableSqlLogService;
 import com.dbg.datawork.mapper.TableSqlLogMapper;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.dbg.datawork.model.dto.user;
 
-import com.dbg.datawork.common.PageRequest;
+import com.dbg.datawork.infra.common.PageRequest;
 
 import java.io.Serializable;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package com.dbg.datawork.service;
 
-import com.dbg.datawork.model.entity.TableCheckLog;
+import com.dbg.datawork.model.pojo.TableCheckLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

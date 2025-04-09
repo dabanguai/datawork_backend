@@ -1,7 +1,7 @@
 package com.dbg.datawork.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dbg.datawork.model.entity.TableCheck;
+import com.dbg.datawork.model.pojo.TableCheck;
 import com.dbg.datawork.service.TableCheckService;
 import com.dbg.datawork.mapper.TableCheckMapper;
 import org.springframework.stereotype.Service;

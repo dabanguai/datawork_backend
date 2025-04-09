@@ -1,6 +1,6 @@
 package com.dbg.datawork.service;
 
-import com.dbg.datawork.model.entity.TableSqlLog;
+import com.dbg.datawork.model.pojo.TableSqlLog;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**

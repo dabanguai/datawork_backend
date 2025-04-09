@@ -1,7 +1,7 @@
 package com.dbg.datawork.aop;
 
-import com.dbg.datawork.common.ErrorCode;
-import com.dbg.datawork.model.entity.User;
+import com.dbg.datawork.infra.common.ErrorCode;
+import com.dbg.datawork.model.pojo.User;
 import com.dbg.datawork.model.enums.UserRoleEnum;
 import com.dbg.datawork.service.UserService;
 import com.dbg.datawork.annotation.AuthCheck;
@@ -16,7 +16,6 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**

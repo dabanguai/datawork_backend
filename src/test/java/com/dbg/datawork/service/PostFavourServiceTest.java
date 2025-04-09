@@ -2,7 +2,7 @@ package com.dbg.datawork.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.dbg.datawork.model.entity.User;
+import com.dbg.datawork.model.pojo.User;
 
 import javax.annotation.Resource;
 import org.junit.jupiter.api.Assertions;

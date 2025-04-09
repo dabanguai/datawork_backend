@@ -1,22 +1,23 @@
 package com.dbg.datawork.service.impl;
 
-import static com.dbg.datawork.constant.UserConstant.USER_LOGIN_STATE;
+import static com.dbg.datawork.infra.constant.UserConstant.USER_LOGIN_STATE;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.dynamic.datasource.annotation.DS;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.dbg.datawork.constant.CommonConstant;
+import com.dbg.datawork.infra.constant.CommonConstant;
 import com.dbg.datawork.mapper.UserMapper;
 import com.dbg.datawork.service.UserService;
-import com.dbg.datawork.common.ErrorCode;
+import com.dbg.datawork.infra.common.ErrorCode;
 import com.dbg.datawork.exception.BusinessException;
 import com.dbg.datawork.model.dto.user.UserQueryRequest;
-import com.dbg.datawork.model.entity.User;
+import com.dbg.datawork.model.pojo.User;
 import com.dbg.datawork.model.enums.UserRoleEnum;
 import com.dbg.datawork.model.vo.LoginUserVO;
 import com.dbg.datawork.model.vo.UserVO;
-import com.dbg.datawork.utils.SqlUtils;
+import com.dbg.datawork.infra.utils.SqlUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,7 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -36,6 +36,7 @@ import org.springframework.util.DigestUtils;
  */
 @Service
 @Slf4j
+@DS("mysql")
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
